@@ -9,6 +9,7 @@ class Menus:
         choix = int(input("que souhaitez vous faire ?"))
         return choix
 
+
     @staticmethod
     def sous_menu_4():
         print("1-Consulter les produits 'A RECHERCHER'")
