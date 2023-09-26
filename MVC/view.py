@@ -2,11 +2,12 @@ class Menus:
     @staticmethod
     def menu_principal():
         print("1-Créer la base de données EAN")
-        print("2-créer la base de données de nos produits")
-        print("3-faire une requête BDD EAN")
-        print("4-faire une requête sur nos produits")
-        print("5-création, remplissage et requête BDD Tri")
-        print("6-quitter")
+        print("2-créer la base de données de nos produits (ShippingBo)")
+        print("3-Créer la base de données des produits issus de Prestashop")
+        print("4-faire une requête BDD EAN")
+        print("5-faire une requête sur nos produits (ShippingBo)")
+        print("6-création, remplissage et requête BDD Tri")
+        print("7-quitter")
         choix = int(input("que souhaitez vous faire ?"))
         return choix
 

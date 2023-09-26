@@ -65,8 +65,34 @@ class Lancement:
                 input("Tapez une touche pour continuer")
                 Lancement.depart()
 
-            # Consultation BDD EAN
+            # Création BDD issue de Prestashop
             if retour_menu == 3:
+                # Lecture du fichier CSV avec les colonnes sélectionnées
+                selected_columns = ["actif", "référence", "ean13", "id_product", "id_product_attribute", "description FR", "description courte FR", "nom FR", "nom avec attributs FR", "produits du pack", "prix HT", "prix TTC", "tva", "quantité", "quantité physique", "catégorie par défaut FR", "catégorie par défaut (chemin complet) FR", "catégories FR", "catégories (chemin complet) FR", "fabricant", "images : urls_to_all_for_product FR"]
+                df = pd.read_csv('2023_09_26 complet_presta.csv', sep=';', usecols=selected_columns, encoding='latin-1')
+
+                # Connexion à la base de données SQLite
+                conn = sqlite3.connect('BDD_Presta.db')
+
+                # Écriture des données dans la table de la base de données
+                df.to_sql('produits', conn, if_exists='replace', index=False)
+
+                cursor = conn.cursor()
+
+                # Création de l'index sur la colonne "code"
+                cursor.execute('CREATE INDEX IF NOT EXISTS idx_code ON produits (ean13)')
+
+                # Enregistrement des modifications et fermeture de la connexion
+                conn.commit()
+                # Fermeture de la connexion
+                conn.close()
+
+                # Retour au menu
+                input("Tapez une touche pour continuer")
+                Lancement.depart()
+
+            # Consultation BDD EAN
+            if retour_menu == 4:
                 # Demander à l'utilisateur de saisir un code
                 code = input('Veuillez entrer le code de l\'article que vous recherchez : ')
 
@@ -89,7 +115,7 @@ class Lancement:
                 Lancement.depart()
 
             # Consultation notre BDD
-            if retour_menu == 4:
+            if retour_menu == 5:
                 sous_menu = Menus.sous_menu_4()
                 if sous_menu == 1:
                     # Rechercher les article ayant pour titre A RECHERCHER
@@ -128,7 +154,7 @@ class Lancement:
                     Lancement.depart()
 
             # Création / remplissage et consultation de la BDD tri
-            if retour_menu == 5:
+            if retour_menu == 6:
                 sous_menu = Menus.sous_menu_5()
                 # Création
                 if sous_menu == 1:
@@ -143,7 +169,7 @@ class Lancement:
                     pass
 
             # Quitter
-            if retour_menu == 6:
+            if retour_menu == 7:
                 sys.exit("Merci et à bientôt !")
 
 
