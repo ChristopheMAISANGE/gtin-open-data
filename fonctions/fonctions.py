@@ -12,6 +12,7 @@ def rechercher_article(code):
     conn.close()
     return article
 
+
 def rechercher_nos_articles(code, stock):
     conn = sqlite3.connect('notreBDD.db')
     cursor = conn.cursor()
@@ -22,6 +23,7 @@ def rechercher_nos_articles(code, stock):
 
     conn.close()
     return article
+
 
 def suppr_a_rechercher_0():
     conn = sqlite3.connect('notreBDD.db')
@@ -43,6 +45,6 @@ def suppr_a_rechercher_0():
         resultat = "D'accord, nous n'avons rien supprimé"
     return resultat
 
+
 if __name__ == "__main__":
     print("Merci de commencer par lancer main.py")
-

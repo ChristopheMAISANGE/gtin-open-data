@@ -127,7 +127,23 @@ class Lancement:
                     input("tapez enter pour continuer")
                     Lancement.depart()
 
+            # Création / remplissage et consultation de la BDD tri
             if retour_menu == 5:
+                sous_menu = Menus.sous_menu_5()
+                # Création
+                if sous_menu == 1:
+                    pass
+
+                # Remplissage manuel
+                if sous_menu == 2:
+                    pass
+
+                # Remplissage par CSV
+                if sous_menu == 3:
+                    pass
+
+            # Quitter
+            if retour_menu == 6:
                 sys.exit("Merci et à bientôt !")
 
 
