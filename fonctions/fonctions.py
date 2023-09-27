@@ -78,6 +78,17 @@ def article_stock_presta():
     conn.close()
     return articles
 
+def rechercher_article_presta(code):
+    conn = sqlite3.connect('BDD_Presta.db')
+    cursor = conn.cursor()
+
+    # Exécution de la requête SQL pour rechercher l'article par code
+    cursor.execute('SELECT * FROM produits WHERE ean13 = ?', (code,))
+    articles = cursor.fetchall()
+
+    conn.close()
+    return articles
+
 
 if __name__ == "__main__":
     print("Merci de commencer par lancer main.py")

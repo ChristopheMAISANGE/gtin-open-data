@@ -4,6 +4,7 @@ import sqlite3
 
 from fonctions.fonctions import rechercher_article, rechercher_nos_articles, suppr_a_rechercher_0
 from fonctions.fonctions import article_sans_stock_presta, article_stock_presta, article_ss_description_presta
+from fonctions.fonctions import rechercher_article_presta
 from MVC.view import Menus
 
 
@@ -187,6 +188,40 @@ class Lancement:
                     print("Il y a actuellement", str(len(articles_ss_description)), "articles sans description mais avec du stock.")
                     input("tapez enter pour continuer")
                     Lancement.depart()
+
+                # Recherche par ean dans BDD Prestashop
+                if sous_menu == 5:
+                    code = input('Veuillez entrer le code de l\'article que vous recherchez : ')
+
+                    # Rechercher l'article
+                    articles = rechercher_article_presta(code)
+
+                    for article in articles :
+                        print(" ")
+                        print(article[0])
+                        print(article[1])
+                        print(article[2])
+                        print(article[3])
+                        print(article[4])
+                        print(article[5])
+                        print(article[6])
+                        print(article[7])
+                        print(article[8])
+                        print(article[9])
+                        print(article[10])
+                        print(article[11])
+                        print(article[12])
+                        print(article[13])
+                        print(article[14])
+                        print(article[15])
+                        print(article[16])
+                        print(article[17])
+                        print(article[18])
+                        print(article[19])
+                        print(article[20])
+                        print(" ")
+                        input("tapez enter pour continuer")
+
 
             # Création / remplissage et consultation de la BDD tri
             if retour_menu == 7:
