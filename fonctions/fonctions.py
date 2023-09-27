@@ -46,5 +46,27 @@ def suppr_a_rechercher_0():
     return resultat
 
 
+def article_sans_stock_presta():
+    conn = sqlite3.connect('BDD_Presta.db')
+    cursor = conn.cursor()
+
+    cursor.execute('SELECT * FROM produits WHERE quantité = 0')
+    articles = cursor.fetchall()
+
+    conn.close()
+    return articles
+
+
+def article_stock_presta():
+    conn = sqlite3.connect('BDD_Presta.db')
+    cursor = conn.cursor()
+
+    cursor.execute('SELECT * FROM produits WHERE quantité >= 1')
+    articles = cursor.fetchall()
+
+    conn.close()
+    return articles
+
+
 if __name__ == "__main__":
     print("Merci de commencer par lancer main.py")

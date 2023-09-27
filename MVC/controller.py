@@ -3,6 +3,7 @@ import pandas as pd
 import sqlite3
 
 from fonctions.fonctions import rechercher_article, rechercher_nos_articles, suppr_a_rechercher_0
+from fonctions.fonctions import article_sans_stock_presta, article_stock_presta
 from MVC.view import Menus
 
 
@@ -116,7 +117,7 @@ class Lancement:
 
             # Consultation notre BDD
             if retour_menu == 5:
-                sous_menu = Menus.sous_menu_4()
+                sous_menu = Menus.sous_menu_5()
                 if sous_menu == 1:
                     # Rechercher les article ayant pour titre A RECHERCHER
                     code = "A RECHERCHER"
@@ -153,9 +154,36 @@ class Lancement:
                     input("tapez enter pour continuer")
                     Lancement.depart()
 
-            # Création / remplissage et consultation de la BDD tri
+            # Consultation BDD Presta
             if retour_menu == 6:
-                sous_menu = Menus.sous_menu_5()
+                sous_menu = Menus.sous_menu_6()
+
+                # Compter les articles sans stock
+                if sous_menu == 1:
+                    articles_ss_stock = article_sans_stock_presta()
+                    print("Il y a ", str(len(articles_ss_stock)), " articles dont le stock est à 0 !")
+                    input("tapez enter pour continuer")
+                    Lancement.depart()
+
+                # Compter articles avec du stock
+                if sous_menu == 2:
+                    articles_en_stock = article_stock_presta()
+                    print("Il y a ", str(len(articles_en_stock)), " articles avec du stock !")
+                    input("tapez enter pour continuer")
+                    Lancement.depart()
+
+                # Compter articles total
+                if sous_menu == 3:
+                    articles_ss_stock = article_sans_stock_presta()
+                    articles_en_stock = article_stock_presta()
+                    nb_articles_total = len(articles_ss_stock) + len(articles_en_stock)
+                    print("Il y a actuellement ", str(nb_articles_total), "article dans la BDD.")
+                    input("tapez enter pour continuer")
+                    Lancement.depart()
+
+            # Création / remplissage et consultation de la BDD tri
+            if retour_menu == 7:
+                sous_menu = Menus.sous_menu_7()
                 # Création
                 if sous_menu == 1:
                     pass
@@ -169,7 +197,7 @@ class Lancement:
                     pass
 
             # Quitter
-            if retour_menu == 7:
+            if retour_menu == 8:
                 sys.exit("Merci et à bientôt !")
 
 
