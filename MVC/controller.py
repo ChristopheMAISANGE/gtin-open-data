@@ -3,7 +3,7 @@ import pandas as pd
 import sqlite3
 
 from fonctions.fonctions import rechercher_article, rechercher_nos_articles, suppr_a_rechercher_0
-from fonctions.fonctions import article_sans_stock_presta, article_stock_presta
+from fonctions.fonctions import article_sans_stock_presta, article_stock_presta, article_ss_description_presta
 from MVC.view import Menus
 
 
@@ -161,14 +161,14 @@ class Lancement:
                 # Compter les articles sans stock
                 if sous_menu == 1:
                     articles_ss_stock = article_sans_stock_presta()
-                    print("Il y a ", str(len(articles_ss_stock)), " articles dont le stock est à 0 !")
+                    print("Il y a", str(len(articles_ss_stock)), "articles dont le stock est à 0 !")
                     input("tapez enter pour continuer")
                     Lancement.depart()
 
                 # Compter articles avec du stock
                 if sous_menu == 2:
                     articles_en_stock = article_stock_presta()
-                    print("Il y a ", str(len(articles_en_stock)), " articles avec du stock !")
+                    print("Il y a", str(len(articles_en_stock)), "articles avec du stock !")
                     input("tapez enter pour continuer")
                     Lancement.depart()
 
@@ -177,7 +177,14 @@ class Lancement:
                     articles_ss_stock = article_sans_stock_presta()
                     articles_en_stock = article_stock_presta()
                     nb_articles_total = len(articles_ss_stock) + len(articles_en_stock)
-                    print("Il y a actuellement ", str(nb_articles_total), "article dans la BDD.")
+                    print("Il y a actuellement", str(nb_articles_total), "articles dans la BDD.")
+                    input("tapez enter pour continuer")
+                    Lancement.depart()
+
+                # Articles sans description mais avec stock
+                if sous_menu == 4:
+                    articles_ss_description = article_ss_description_presta()
+                    print("Il y a actuellement", str(len(articles_ss_description)), "articles sans description mais avec du stock.")
                     input("tapez enter pour continuer")
                     Lancement.depart()
 

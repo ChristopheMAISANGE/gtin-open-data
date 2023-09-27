@@ -57,6 +57,17 @@ def article_sans_stock_presta():
     return articles
 
 
+def article_ss_description_presta():
+    conn = sqlite3.connect('BDD_Presta.db')
+    cursor = conn.cursor()
+
+    cursor.execute ('SELECT * FROM produits WHERE "description FR" IS NULL AND quantité >= 1')
+    articles = cursor.fetchall()
+
+    conn.close()
+    return articles
+
+
 def article_stock_presta():
     conn = sqlite3.connect('BDD_Presta.db')
     cursor = conn.cursor()
