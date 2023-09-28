@@ -19,15 +19,18 @@ class Menus:
         print("3-Compter le nombre de produits dans la BDD")
         print("4-Copier les produits ayant du stock dans une table à part")
         print("5-Créer un CSV de la table produits_avec_stock")
+        print("6-Afficher le nombre de produits dans la table et le nom des colonnes")
+        print("7-Transfert des descriptions depuis prestashop")
         choix = int(input("que souhaitez vous faire ?"))
         return choix
 
     @staticmethod
     def sous_menu_6():
-        print("1-compter le nombre d'articles sans stocks")
+        print("1-compter le nombre d'articles")
         print("2-compter le nombre d'articles sans description")
         print("3-recherche EAN")
         print("4-supprimer les articles sans stock")
+        print("5-Création du CSV des produits avec stocks et sans description")
         choix = int(input("Que voulez vous faire ?"))
         return choix
 

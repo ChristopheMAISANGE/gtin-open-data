@@ -243,6 +243,107 @@ class Lancement:
                     input("Tapez enter pour continuer")
                     Lancement.depart()
 
+                # Afficher le nombre de produits dans la table et le nom des colonnes
+                if sous_menu == 6:
+                    # Établir une connexion à la base de données SQLite
+                    conn = sqlite3.connect('notreBDD.db')
+                    cursor = conn.cursor()
+
+                    # Exécuter la commande SQL PRAGMA pour obtenir les informations sur la table
+                    cursor.execute('PRAGMA table_info(produits_avec_stock)')
+
+                    # Récupérer les résultats et afficher les entêtes de colonnes
+                    columns_info = cursor.fetchall()
+                    column_names = [column[1] for column in columns_info]
+
+                    cursor.execute('SELECT COUNT(*) FROM produits_avec_stock')
+
+                    # Récupérer le résultat
+                    count = cursor.fetchone()[0]
+
+                    # Fermer la connexion à la base de données
+                    conn.close()
+
+                    # Afficher le nombre de produits
+                    print(f'Il y a {count} produits dans la base de données.')
+                    input("Tapez enter pour continuer")
+
+                    # Afficher les entêtes de colonnes
+                    print("Entêtes de colonnes de la table produits_avec_stock:")
+                    print(column_names)
+                    input("Tapez enter pour continuer")
+                    Lancement.depart()
+
+                # Transfert des descriptions de prestashop vers BDD ShippingBo
+                if sous_menu == 7:
+                    # Établir une connexion à la base de données "BDD_Prest.db"
+                    conn_prest = sqlite3.connect('BDD_Presta.db')
+                    cursor_prest = conn_prest.cursor()
+
+                    # Établir une connexion à la base de données "notreBDD.db"
+                    conn_notre = sqlite3.connect('notreBDD.db')
+                    cursor_notre = conn_notre.cursor()
+
+                    # Interroger la base de données "BDD_Prest.db" pour obtenir les correspondances de codes EAN13
+                    cursor_prest.execute('SELECT ean13, "description FR" FROM produits')
+                    ean13_description_mapping = {row[0]: row[1] for row in cursor_prest.fetchall()}
+
+                    # Mettre à jour la table "produits_avec_stock" avec les descriptions correspondantes
+                    count = 0
+                    for ean13, description in ean13_description_mapping.items():
+                        count += 1
+                        cursor_notre.execute('UPDATE produits_avec_stock SET description = ? WHERE ean13 = ?',
+                                             (description, ean13))
+
+                    # Valider la transaction et fermer les connexions aux bases de données
+                    conn_notre.commit()
+                    conn_notre.close()
+                    conn_prest.close()
+
+                    # Afficher le nombre de produits
+                    print(f'Nous avons ajouté {count} descriptions dans la base de données.')
+                    input("Tapez enter pour continuer")
+                    Lancement.depart()
+
+                if sous_menu == 8:
+                    # Établir une connexion à la base de données "BDD_Prest.db"
+                    conn_prest = sqlite3.connect('BDD_Presta.db')
+                    cursor_prest = conn_prest.cursor()
+
+                    # Établir une connexion à la base de données "notreBDD.db"
+                    conn_notre = sqlite3.connect('notreBDD.db')
+                    cursor_notre = conn_notre.cursor()
+
+                    # Extraire les codes EAN13 de la table "produits" dans "BDD_Prest.db"
+                    cursor_prest.execute('SELECT référence FROM produits')
+                    ean13_prest_list = [row[0] for row in cursor_prest.fetchall()]
+
+                    # Extraire les codes EAN13 de la table "produits_avec_stock" dans "notreBDD.db"
+                    cursor_notre.execute('SELECT userRef FROM produits_avec_stock')
+                    ean13_notre_list = [row[0] for row in cursor_notre.fetchall()]
+
+                    # Comparer les listes pour identifier les correspondances
+                    correspondances = set(ean13_prest_list).intersection(ean13_notre_list)
+
+                    # Afficher les correspondances
+                    print("Codes EAN13 communs entre les deux bases de données :")
+                    for ean13 in correspondances:
+                        cursor_prest.execute('SELECT "description FR" FROM produits WHERE référence = ?', (ean13,))
+                        result = cursor_prest.fetchone()
+                        if result is not None:
+                            description = result[0]
+                        else:
+                            description = "None"
+                        cursor_notre.execute('UPDATE produits_avec_stock SET description = ? WHERE userRef = ?',
+                                             (description, ean13))
+                        print(ean13, description, "- OK")
+
+                    print("Il y en a ", len(correspondances))
+
+                    # Fermer les connexions aux bases de données
+                    conn_prest.close()
+                    conn_notre.close()
+
             # Consultation BDD Presta
             if retour_menu == 6:
                 sous_menu = Menus.sous_menu_6()
@@ -312,6 +413,25 @@ class Lancement:
                     suppression = suppr_ss_stock_presta()
                     print(suppression)
                     input("tapez enter pour continuer")
+                    Lancement.depart()
+
+                # Création du CSV des produits avec stocks et sans description
+                if sous_menu == 5:
+                    # Établir une connexion à la base de données SQLite
+                    conn = sqlite3.connect('BDD_Presta.db')
+
+                    # Charger les données de la table "produits_avec_stock" dans un DataFrame Pandas
+                    query = 'SELECT * FROM produits WHERE "description FR" IS NULL AND quantité >= 1'
+                    df = pd.read_sql_query(query, conn)
+
+                    # Fermer la connexion à la base de données SQLite
+                    conn.close()
+
+                    # Exporter le DataFrame dans un fichier CSV avec le point-virgule comme séparateur
+                    df.to_csv('CSV/produits_avec_stock_presta.csv', sep=';', index=False)
+
+                    print("Opération réussie")
+                    input("Tapez enter pour continuer")
                     Lancement.depart()
 
             # Création / remplissage et consultation de la BDD tri
