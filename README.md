@@ -4,8 +4,8 @@ Ceci est un projet pour faire une recherche d'articles parmis une liste de
 
 # Que fait-il ? 
 
-Cette application en Python transforme le fichier CSV en base de données et 
-fait l'indexation des différentes clés de recherche
+Cette application en Python transforme des fichiers CSV en base de données et 
+fait l'indexation des différentes clés de recherche. Il permet aussi de faire quelques requêtes simples.
 
 # Comment utiliser le fichier python
 ## Etape 1 : Créer votre environnement virtuel :
