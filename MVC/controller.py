@@ -231,10 +231,9 @@ class Lancement:
                 # Supprimer les articles sans stock
                 if sous_menu == 4:
                     suppression = suppr_ss_stock_presta()
-                    print (suppression)
+                    print(suppression)
                     input("tapez enter pour continuer")
                     Lancement.depart()
-
 
             # Création / remplissage et consultation de la BDD tri
             if retour_menu == 7:
