@@ -237,7 +237,6 @@ class Lancement:
                     input("tapez enter pour continuer")
                     Lancement.depart()
 
-
             # Création / remplissage et consultation de la BDD tri
             if retour_menu == 7:
                 sous_menu = Menus.sous_menu_7()
