@@ -41,7 +41,7 @@ class Lancement:
                 input("Tapez une touche pour continuer")
                 Lancement.depart()
 
-            # Création notre BDD
+            # Création notre BDD (ShippingBo)
             if retour_menu == 2:
                 # Lecture du fichier CSV avec les colonnes sélectionnées
                 selected_columns = ["id", "userRef", "source", "sourceRef", "stock", "ean13", "title", "location",
@@ -50,7 +50,9 @@ class Lancement:
                                     "otherRef5", "otherRef6", "otherRef7", "otherRef8", "otherRef9", "otherRef10",
                                     "otherRef11", "otherRef12", "otherRef13", "otherRef14", "otherRef15",
                                     "cdiscountPrice", "spartooPartnaireRef"]
-                df = pd.read_csv('product_20230919071201_7204206.csv', sep=';', usecols=selected_columns)
+
+                df = pd.read_csv('productShippingBo.csv', sep=';', usecols=selected_columns,
+                                 low_memory=False)
 
                 # Connexion à la base de données SQLite
                 conn = sqlite3.connect('notreBDD.db')
