@@ -197,7 +197,7 @@ class Lancement:
                     articles = rechercher_article_presta(code)
 
                     if articles:
-                        for article in articles :
+                        for article in articles:
                             print(" ")
                             print("actif :", article[0])
                             print("référence :", article[1])
@@ -257,4 +257,3 @@ class Lancement:
 
 if __name__ == "__main__":
     print("Merci de commencer par lancer main.py")
-
