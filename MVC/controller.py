@@ -81,7 +81,8 @@ class Lancement:
                                     "catégorie par défaut FR", "catégorie par défaut (chemin complet) FR",
                                     "catégories FR", "catégories (chemin complet) FR", "fabricant",
                                     "images : urls_to_all_for_product FR"]
-                df = pd.read_csv('2023_09_26 complet_presta.csv', sep=';', usecols=selected_columns, encoding='latin-1')
+                df = pd.read_csv('2023_09_26 complet_presta.csv', sep=';', usecols=selected_columns,
+                                 encoding='latin-1')
 
                 # Connexion à la base de données SQLite
                 conn = sqlite3.connect('BDD_Presta.db')
@@ -185,7 +186,8 @@ class Lancement:
                 # Articles sans description mais avec stock
                 if sous_menu == 2:
                     articles_ss_description = article_ss_description_presta()
-                    print("Il y a actuellement", str(len(articles_ss_description)), "articles sans description mais avec du stock.")
+                    print("Il y a actuellement", str(len(articles_ss_description)),
+                          "articles sans description mais avec du stock.")
                     input("tapez enter pour continuer")
                     Lancement.depart()
 
@@ -231,7 +233,7 @@ class Lancement:
                 # Supprimer les articles sans stock
                 if sous_menu == 4:
                     suppression = suppr_ss_stock_presta()
-                    print (suppression)
+                    print(suppression)
                     input("tapez enter pour continuer")
                     Lancement.depart()
 
