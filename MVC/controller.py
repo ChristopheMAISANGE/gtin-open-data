@@ -192,12 +192,11 @@ class Lancement:
                 # Recherche par ean dans BDD Prestashop
                 if sous_menu == 3:
                     code = input('Veuillez entrer le code de l\'article que vous recherchez : ')
-
                     # Rechercher l'article
                     articles = rechercher_article_presta(code)
 
-                    if articles :
-                        for article in articles :
+                    if articles:
+                        for article in articles:
                             print(" ")
                             print("actif :", article[0])
                             print("référence :", article[1])
@@ -222,7 +221,7 @@ class Lancement:
                             print("images : urls_to_all_for_product FR :", article[20])
                             print(" ")
                             input("tapez enter pour continuer")
-                    else :
+                    else:
                         print("Nous n'avons pas trouvé d'article avec ce code ean !")
 
                     input("tapez enter pour continuer")
@@ -250,4 +249,3 @@ class Lancement:
 
 if __name__ == "__main__":
     print("Merci de commencer par lancer main.py")
-
