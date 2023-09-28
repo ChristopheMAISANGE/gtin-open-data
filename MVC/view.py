@@ -24,6 +24,7 @@ class Menus:
         print("1-compter le nombre d'articles sans stocks")
         print("2-compter le nombre d'articles sans description")
         print("3-recherche EAN")
+        print("4-supprimer les articles sans stock")
         choix = int(input("Que voulez vous faire ?"))
         return choix
 

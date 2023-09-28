@@ -61,7 +61,7 @@ def article_ss_description_presta():
     conn = sqlite3.connect('BDD_Presta.db')
     cursor = conn.cursor()
 
-    cursor.execute ('SELECT * FROM produits WHERE "description FR" IS NULL AND quantité >= 1')
+    cursor.execute('SELECT * FROM produits WHERE "description FR" IS NULL AND quantité >= 1')
     articles = cursor.fetchall()
 
     conn.close()
@@ -78,6 +78,7 @@ def article_stock_presta():
     conn.close()
     return articles
 
+
 def rechercher_article_presta(code):
     conn = sqlite3.connect('BDD_Presta.db')
     cursor = conn.cursor()
@@ -88,6 +89,26 @@ def rechercher_article_presta(code):
 
     conn.close()
     return articles
+
+
+def suppr_ss_stock_presta():
+    conn = sqlite3.connect('BDD_Presta.db')
+    cursor = conn.cursor()
+
+    # Executer la suppression
+    sur = input("Êtes vous sûr de vouloir supprimer les entrées A RECHERCHER dont le stock est à 0 ?")
+    if sur == "oui":
+        try:
+            cursor.execute('DELETE FROM produits WHERE quantié < 1')
+            conn.commit()
+            resultat = "Les produits A RECHERCHER dont le stock est à 0 ont été supprimés"
+            cursor.close()
+            conn.close()
+        except sqlite3.Error as error:
+            resultat = "Erreur lors du suppression dans la table :", error
+    if sur == "non":
+        resultat = "D'accord, nous n'avons rien supprimé"
+    return resultat
 
 
 if __name__ == "__main__":

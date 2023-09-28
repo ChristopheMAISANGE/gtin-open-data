@@ -4,7 +4,7 @@ import sqlite3
 
 from fonctions.fonctions import rechercher_article, rechercher_nos_articles, suppr_a_rechercher_0
 from fonctions.fonctions import article_sans_stock_presta, article_stock_presta, article_ss_description_presta
-from fonctions.fonctions import rechercher_article_presta
+from fonctions.fonctions import rechercher_article_presta, suppr_ss_stock_presta
 from MVC.view import Menus
 
 
@@ -196,7 +196,7 @@ class Lancement:
                     # Rechercher l'article
                     articles = rechercher_article_presta(code)
 
-                    if articles :
+                    if articles:
                         for article in articles :
                             print(" ")
                             print("actif :", article[0])
@@ -222,9 +222,16 @@ class Lancement:
                             print("images : urls_to_all_for_product FR :", article[20])
                             print(" ")
                             input("tapez enter pour continuer")
-                    else :
+                    else:
                         print("Nous n'avons pas trouvé d'article avec ce code ean !")
 
+                    input("tapez enter pour continuer")
+                    Lancement.depart()
+
+                # Supprimer les articles sans stock
+                if sous_menu == 4:
+                    suppression = suppr_ss_stock_presta()
+                    print (suppression)
                     input("tapez enter pour continuer")
                     Lancement.depart()
 
