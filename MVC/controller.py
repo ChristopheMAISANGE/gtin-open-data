@@ -44,7 +44,12 @@ class Lancement:
             # Création notre BDD
             if retour_menu == 2:
                 # Lecture du fichier CSV avec les colonnes sélectionnées
-                selected_columns = ["id", "userRef", "source", "sourceRef", "stock", "ean13", "title", "location", "weight", "clientRef", "pictureUrl", "hsCode", "supplier", "taxRate", "isPack", "height", "length", "width", "otherRef1", "otherRef2", "otherRef3", "otherRef4", "otherRef5", "otherRef6", "otherRef7", "otherRef8", "otherRef9", "otherRef10", "otherRef11", "otherRef12", "otherRef13", "otherRef14", "otherRef15", "cdiscountPrice", "spartooPartnaireRef"]
+                selected_columns = ["id", "userRef", "source", "sourceRef", "stock", "ean13", "title", "location",
+                                    "weight", "clientRef", "pictureUrl", "hsCode", "supplier", "taxRate", "isPack",
+                                    "height", "length", "width", "otherRef1", "otherRef2", "otherRef3", "otherRef4",
+                                    "otherRef5", "otherRef6", "otherRef7", "otherRef8", "otherRef9", "otherRef10",
+                                    "otherRef11", "otherRef12", "otherRef13", "otherRef14", "otherRef15",
+                                    "cdiscountPrice", "spartooPartnaireRef"]
                 df = pd.read_csv('product_20230919071201_7204206.csv', sep=';', usecols=selected_columns)
 
                 # Connexion à la base de données SQLite
@@ -70,7 +75,12 @@ class Lancement:
             # Création BDD issue de Prestashop
             if retour_menu == 3:
                 # Lecture du fichier CSV avec les colonnes sélectionnées
-                selected_columns = ["actif", "référence", "ean13", "id_product", "id_product_attribute", "description FR", "description courte FR", "nom FR", "nom avec attributs FR", "produits du pack", "prix HT", "prix TTC", "tva", "quantité", "quantité physique", "catégorie par défaut FR", "catégorie par défaut (chemin complet) FR", "catégories FR", "catégories (chemin complet) FR", "fabricant", "images : urls_to_all_for_product FR"]
+                selected_columns = ["actif", "référence", "ean13", "id_product", "id_product_attribute",
+                                    "description FR", "description courte FR", "nom FR", "nom avec attributs FR",
+                                    "produits du pack", "prix HT", "prix TTC", "tva", "quantité", "quantité physique",
+                                    "catégorie par défaut FR", "catégorie par défaut (chemin complet) FR",
+                                    "catégories FR", "catégories (chemin complet) FR", "fabricant",
+                                    "images : urls_to_all_for_product FR"]
                 df = pd.read_csv('2023_09_26 complet_presta.csv', sep=';', usecols=selected_columns, encoding='latin-1')
 
                 # Connexion à la base de données SQLite
@@ -159,69 +169,64 @@ class Lancement:
             if retour_menu == 6:
                 sous_menu = Menus.sous_menu_6()
 
-                # Compter les articles sans stock
+                # Compter les articles sans stock, avec stock et total
                 if sous_menu == 1:
                     articles_ss_stock = article_sans_stock_presta()
                     print("Il y a", str(len(articles_ss_stock)), "articles dont le stock est à 0 !")
                     input("tapez enter pour continuer")
-                    Lancement.depart()
-
-                # Compter articles avec du stock
-                if sous_menu == 2:
                     articles_en_stock = article_stock_presta()
                     print("Il y a", str(len(articles_en_stock)), "articles avec du stock !")
                     input("tapez enter pour continuer")
-                    Lancement.depart()
-
-                # Compter articles total
-                if sous_menu == 3:
-                    articles_ss_stock = article_sans_stock_presta()
-                    articles_en_stock = article_stock_presta()
                     nb_articles_total = len(articles_ss_stock) + len(articles_en_stock)
                     print("Il y a actuellement", str(nb_articles_total), "articles dans la BDD.")
                     input("tapez enter pour continuer")
                     Lancement.depart()
 
                 # Articles sans description mais avec stock
-                if sous_menu == 4:
+                if sous_menu == 2:
                     articles_ss_description = article_ss_description_presta()
                     print("Il y a actuellement", str(len(articles_ss_description)), "articles sans description mais avec du stock.")
                     input("tapez enter pour continuer")
                     Lancement.depart()
 
                 # Recherche par ean dans BDD Prestashop
-                if sous_menu == 5:
+                if sous_menu == 3:
                     code = input('Veuillez entrer le code de l\'article que vous recherchez : ')
 
                     # Rechercher l'article
                     articles = rechercher_article_presta(code)
 
-                    for article in articles :
-                        print(" ")
-                        print(article[0])
-                        print(article[1])
-                        print(article[2])
-                        print(article[3])
-                        print(article[4])
-                        print(article[5])
-                        print(article[6])
-                        print(article[7])
-                        print(article[8])
-                        print(article[9])
-                        print(article[10])
-                        print(article[11])
-                        print(article[12])
-                        print(article[13])
-                        print(article[14])
-                        print(article[15])
-                        print(article[16])
-                        print(article[17])
-                        print(article[18])
-                        print(article[19])
-                        print(article[20])
-                        print(" ")
-                        input("tapez enter pour continuer")
+                    if articles :
+                        for article in articles :
+                            print(" ")
+                            print("actif :", article[0])
+                            print("référence :", article[1])
+                            print("ean13 :", article[2])
+                            print("id_product :", article[3])
+                            print("id_product_attribute :", article[4])
+                            print("description FR :", article[5])
+                            print("description courte FR :", article[6])
+                            print("nom FR :", article[7])
+                            print("nom avec attributs FR :", article[8])
+                            print("produits du pack :", article[9])
+                            print("prix HT :", article[10])
+                            print("prix TTC :", article[11])
+                            print("tva :", article[12])
+                            print("quantité :", article[13])
+                            print("quantité physique :", article[14])
+                            print("catégorie par défaut FR :", article[15])
+                            print("catégorie par défaut (chemin complet) FR :", article[16])
+                            print("catégories FR :", article[17])
+                            print("catégories (chemin complet) FR :", article[18])
+                            print("fabricant :", article[19])
+                            print("images : urls_to_all_for_product FR :", article[20])
+                            print(" ")
+                            input("tapez enter pour continuer")
+                    else :
+                        print("Nous n'avons pas trouvé d'article avec ce code ean !")
 
+                    input("tapez enter pour continuer")
+                    Lancement.depart()
 
             # Création / remplissage et consultation de la BDD tri
             if retour_menu == 7:
