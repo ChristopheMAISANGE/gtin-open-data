@@ -7,7 +7,6 @@ from fonctions.fonctions import article_sans_stock_presta, article_stock_presta,
 from fonctions.fonctions import rechercher_article_presta, suppr_ss_stock_presta
 from MVC.view import Menus
 
-
 class Lancement:
     @staticmethod
     def depart():
