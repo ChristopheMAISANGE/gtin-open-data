@@ -16,6 +16,9 @@ class Menus:
     def sous_menu_5():
         print("1-Consulter les produits 'A RECHERCHER'")
         print("2-Supprimer les A RECHERCHER dont le stock est à 0")
+        print("3-Compter le nombre de produits dans la BDD")
+        print("4-Copier les produits ayant du stock dans une table à part")
+        print("5-Créer un CSV de la table produits_avec_stock")
         choix = int(input("que souhaitez vous faire ?"))
         return choix
 

@@ -132,8 +132,9 @@ class Lancement:
             # Consultation notre BDD
             if retour_menu == 5:
                 sous_menu = Menus.sous_menu_5()
+
+                # Rechercher les article ayant pour titre A RECHERCHER
                 if sous_menu == 1:
-                    # Rechercher les article ayant pour titre A RECHERCHER
                     code = "A RECHERCHER"
                     stock = 0
                     article_total = rechercher_nos_articles(code, stock)
@@ -159,6 +160,8 @@ class Lancement:
                     # Retour au menu
                     input("Tapez une touche pour continuer")
                     Lancement.depart()
+
+                # Supprimer les A RECHERCHER dont le stock est à 0
                 if sous_menu == 2:
                     resultat = suppr_a_rechercher_0()
                     print(resultat)
@@ -166,6 +169,78 @@ class Lancement:
 
                     # Retour au menu
                     input("tapez enter pour continuer")
+                    Lancement.depart()
+
+                # Compter le nombre de produits dans la BDD
+                if sous_menu == 3:
+                    # Établir une connexion à la base de données SQLite
+                    conn = sqlite3.connect('notreBDD.db')
+
+                    # Créer un curseur
+                    cursor = conn.cursor()
+
+                    # Exécuter une requête SQL pour compter le nombre de lignes dans la table "produits"
+                    cursor.execute('SELECT COUNT(*) FROM produits')
+
+                    # Récupérer le résultat
+                    count = cursor.fetchone()[0]
+
+                    # Fermer la connexion à la base de données
+                    conn.close()
+
+                    # Afficher le nombre de produits
+                    print(f'Il y a {count} produits dans la base de données.')
+                    input("Tapez enter pour continuer")
+                    Lancement.depart()
+
+                # Créer une table avec les produits en stock
+                if sous_menu == 4:
+                    # Établir une connexion à la base de données SQLite
+                    conn = sqlite3.connect('notreBDD.db')
+                    cursor = conn.cursor()
+
+                    # Créer la table "produits_avec_stock" avec la même structure que "produits"
+                    cursor.execute("PRAGMA table_info(produits)")
+                    table_structure = ', '.join([f'{column[1]} {column[2]}' for column in cursor.fetchall()])
+                    cursor.execute(f"CREATE TABLE produits_avec_stock ({table_structure})")
+
+                    # Insérer les produits dont le stock est supérieur ou égal à 1 dans la nouvelle table
+                    cursor.execute("INSERT INTO produits_avec_stock SELECT * FROM produits WHERE stock >= 1")
+
+                    # Valider la transaction
+                    conn.commit()
+
+                    # Exécuter une requête SQL pour compter le nombre de lignes dans la table "produits"
+                    cursor.execute('SELECT COUNT(*) FROM produits_avec_stock')
+
+                    # Récupérer le résultat
+                    count = cursor.fetchone()[0]
+
+                    # Fermer la connexion à la base de données
+                    conn.close()
+
+                    # Afficher le nombre de produits
+                    print(f'Il y a {count} produits dans la table "produits_avec_stock".')
+                    input("Tapez enter pour continuer")
+                    Lancement.depart()
+
+                # Exporter les produits avec stock en CSV
+                if sous_menu == 5:
+                    # Établir une connexion à la base de données SQLite
+                    conn = sqlite3.connect('notreBDD.db')
+
+                    # Charger les données de la table "produits_avec_stock" dans un DataFrame Pandas
+                    query = 'SELECT * FROM produits_avec_stock'
+                    df = pd.read_sql_query(query, conn)
+
+                    # Fermer la connexion à la base de données SQLite
+                    conn.close()
+
+                    # Exporter le DataFrame dans un fichier CSV avec le point-virgule comme séparateur
+                    df.to_csv('CSV/produits_avec_stock.csv', sep=';', index=False)
+
+                    print("Opération réussie")
+                    input("Tapez enter pour continuer")
                     Lancement.depart()
 
             # Consultation BDD Presta
