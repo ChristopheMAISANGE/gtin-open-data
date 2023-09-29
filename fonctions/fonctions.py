@@ -2,7 +2,7 @@ import sqlite3
 
 
 def rechercher_article(code):
-    conn = sqlite3.connect('open4goods.db')
+    conn = sqlite3.connect('BDD/open4goods.db')
     cursor = conn.cursor()
 
     # Exécution de la requête SQL pour rechercher l'article par code
@@ -14,7 +14,7 @@ def rechercher_article(code):
 
 
 def rechercher_nos_articles(code, stock):
-    conn = sqlite3.connect('notreBDD.db')
+    conn = sqlite3.connect('BDD/notreBDD.db')
     cursor = conn.cursor()
 
     # Exécution de la requête SQL pour rechercher l'article par code
@@ -26,7 +26,7 @@ def rechercher_nos_articles(code, stock):
 
 
 def suppr_a_rechercher_0():
-    conn = sqlite3.connect('notreBDD.db')
+    conn = sqlite3.connect('BDD/notreBDD.db')
     cursor = conn.cursor()
 
     # Executer la suppression
@@ -47,7 +47,7 @@ def suppr_a_rechercher_0():
 
 
 def article_sans_stock_presta():
-    conn = sqlite3.connect('BDD_Presta.db')
+    conn = sqlite3.connect('BDD/BDD_Presta.db')
     cursor = conn.cursor()
 
     cursor.execute('SELECT * FROM produits WHERE quantité = 0')
@@ -58,7 +58,7 @@ def article_sans_stock_presta():
 
 
 def article_ss_description_presta():
-    conn = sqlite3.connect('BDD_Presta.db')
+    conn = sqlite3.connect('BDD/BDD_Presta.db')
     cursor = conn.cursor()
 
     cursor.execute('SELECT * FROM produits WHERE "description FR" IS NULL AND quantité >= 1')
@@ -69,7 +69,7 @@ def article_ss_description_presta():
 
 
 def article_stock_presta():
-    conn = sqlite3.connect('BDD_Presta.db')
+    conn = sqlite3.connect('BDD/BDD_Presta.db')
     cursor = conn.cursor()
 
     cursor.execute('SELECT * FROM produits WHERE quantité >= 1')
@@ -80,7 +80,7 @@ def article_stock_presta():
 
 
 def rechercher_article_presta(code):
-    conn = sqlite3.connect('BDD_Presta.db')
+    conn = sqlite3.connect('BDD/BDD_Presta.db')
     cursor = conn.cursor()
 
     # Exécution de la requête SQL pour rechercher l'article par code
@@ -92,7 +92,7 @@ def rechercher_article_presta(code):
 
 
 def suppr_ss_stock_presta():
-    conn = sqlite3.connect('BDD_Presta.db')
+    conn = sqlite3.connect('BDD/BDD_Presta.db')
     cursor = conn.cursor()
 
     # Executer la suppression

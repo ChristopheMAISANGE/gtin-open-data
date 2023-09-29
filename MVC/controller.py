@@ -22,7 +22,7 @@ class Lancement:
                 df = pd.read_csv('open4goods-full-gtin-dataset.csv', usecols=selected_columns)
 
                 # Connexion à la base de données SQLite
-                conn = sqlite3.connect('open4goods.db')
+                conn = sqlite3.connect('BDD/open4goods.db')
 
                 # Écriture des données dans la table de la base de données
                 df.to_sql('produits', conn, if_exists='replace', index=False)
@@ -55,7 +55,7 @@ class Lancement:
                                  low_memory=False)
 
                 # Connexion à la base de données SQLite
-                conn = sqlite3.connect('notreBDD.db')
+                conn = sqlite3.connect('BDD/notreBDD.db')
 
                 # Écriture des données dans la table de la base de données
                 df.to_sql('produits', conn, if_exists='replace', index=False)
@@ -87,7 +87,7 @@ class Lancement:
                                  encoding='latin-1')
 
                 # Connexion à la base de données SQLite
-                conn = sqlite3.connect('BDD_Presta.db')
+                conn = sqlite3.connect('BDD/BDD_Presta.db')
 
                 # Écriture des données dans la table de la base de données
                 df.to_sql('produits', conn, if_exists='replace', index=False)
@@ -174,7 +174,7 @@ class Lancement:
                 # Compter le nombre de produits dans la BDD
                 if sous_menu == 3:
                     # Établir une connexion à la base de données SQLite
-                    conn = sqlite3.connect('notreBDD.db')
+                    conn = sqlite3.connect('BDD/notreBDD.db')
 
                     # Créer un curseur
                     cursor = conn.cursor()
@@ -196,7 +196,7 @@ class Lancement:
                 # Créer une table avec les produits en stock
                 if sous_menu == 4:
                     # Établir une connexion à la base de données SQLite
-                    conn = sqlite3.connect('notreBDD.db')
+                    conn = sqlite3.connect('BDD/notreBDD.db')
                     cursor = conn.cursor()
 
                     # Créer la table "produits_avec_stock" avec la même structure que "produits"
@@ -227,7 +227,7 @@ class Lancement:
                 # Exporter les produits avec stock en CSV
                 if sous_menu == 5:
                     # Établir une connexion à la base de données SQLite
-                    conn = sqlite3.connect('notreBDD.db')
+                    conn = sqlite3.connect('BDD/notreBDD.db')
 
                     # Charger les données de la table "produits_avec_stock" dans un DataFrame Pandas
                     query = 'SELECT * FROM produits_avec_stock'
@@ -246,7 +246,7 @@ class Lancement:
                 # Afficher le nombre de produits dans la table et le nom des colonnes
                 if sous_menu == 6:
                     # Établir une connexion à la base de données SQLite
-                    conn = sqlite3.connect('notreBDD.db')
+                    conn = sqlite3.connect('BDD/notreBDD.db')
                     cursor = conn.cursor()
 
                     # Exécuter la commande SQL PRAGMA pour obtenir les informations sur la table
@@ -277,11 +277,11 @@ class Lancement:
                 # Transfert des descriptions de prestashop vers BDD ShippingBo
                 if sous_menu == 7:
                     # Établir une connexion à la base de données "BDD_Prest.db"
-                    conn_prest = sqlite3.connect('BDD_Presta.db')
+                    conn_prest = sqlite3.connect('BDD/BDD_Presta.db')
                     cursor_prest = conn_prest.cursor()
 
                     # Établir une connexion à la base de données "notreBDD.db"
-                    conn_notre = sqlite3.connect('notreBDD.db')
+                    conn_notre = sqlite3.connect('BDD/notreBDD.db')
                     cursor_notre = conn_notre.cursor()
 
                     # Interroger la base de données "BDD_Prest.db" pour obtenir les correspondances de codes EAN13
@@ -307,11 +307,11 @@ class Lancement:
 
                 if sous_menu == 8:
                     # Établir une connexion à la base de données "BDD_Prest.db"
-                    conn_prest = sqlite3.connect('BDD_Presta.db')
+                    conn_prest = sqlite3.connect('BDD/BDD_Presta.db')
                     cursor_prest = conn_prest.cursor()
 
                     # Établir une connexion à la base de données "notreBDD.db"
-                    conn_notre = sqlite3.connect('notreBDD.db')
+                    conn_notre = sqlite3.connect('BDD/notreBDD.db')
                     cursor_notre = conn_notre.cursor()
 
                     # Extraire les codes EAN13 de la table "produits" dans "BDD_Prest.db"
@@ -418,7 +418,7 @@ class Lancement:
                 # Création du CSV des produits avec stocks et sans description
                 if sous_menu == 5:
                     # Établir une connexion à la base de données SQLite
-                    conn = sqlite3.connect('BDD_Presta.db')
+                    conn = sqlite3.connect('BDD/BDD_Presta.db')
 
                     # Charger les données de la table "produits_avec_stock" dans un DataFrame Pandas
                     query = 'SELECT * FROM produits WHERE "description FR" IS NULL AND quantité >= 1'
@@ -436,7 +436,7 @@ class Lancement:
 
                 if sous_menu == 6:
                     # Établir une connexion à la base de données SQLite
-                    conn = sqlite3.connect('BDD_Presta.db')
+                    conn = sqlite3.connect('BDD/BDD_Presta.db')
 
                     # Charger les données de la table "produits_avec_stock" dans un DataFrame Pandas
                     query = 'SELECT * FROM produits WHERE quantité >= 1'
