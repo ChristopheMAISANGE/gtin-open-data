@@ -434,6 +434,24 @@ class Lancement:
                     input("Tapez enter pour continuer")
                     Lancement.depart()
 
+                if sous_menu == 6:
+                    # Établir une connexion à la base de données SQLite
+                    conn = sqlite3.connect('BDD_Presta.db')
+
+                    # Charger les données de la table "produits_avec_stock" dans un DataFrame Pandas
+                    query = 'SELECT * FROM produits WHERE quantité >= 1'
+                    df = pd.read_sql_query(query, conn)
+
+                    # Fermer la connexion à la base de données SQLite
+                    conn.close()
+
+                    # Exporter le DataFrame dans un fichier CSV avec le point-virgule comme séparateur
+                    df.to_csv('CSV/tous_produits_avec_stock_presta.csv', sep=';', index=False)
+
+                    print("Opération réussie")
+                    input("Tapez enter pour continuer")
+                    Lancement.depart()
+
             # Création / remplissage et consultation de la BDD tri
             if retour_menu == 7:
                 sous_menu = Menus.sous_menu_7()

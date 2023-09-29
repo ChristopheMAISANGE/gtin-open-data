@@ -30,7 +30,8 @@ class Menus:
         print("2-compter le nombre d'articles sans description")
         print("3-recherche EAN")
         print("4-supprimer les articles sans stock")
-        print("5-Création du CSV des produits avec stocks et sans description")
+        print("5-Création du CSV des produits avec stock et sans description")
+        print("6-Création du CSV des produits avec du stock")
         choix = int(input("Que voulez vous faire ?"))
         return choix
 
