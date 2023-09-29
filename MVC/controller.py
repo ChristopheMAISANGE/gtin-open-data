@@ -252,7 +252,7 @@ class Lancement:
                     # Exécuter la commande SQL PRAGMA pour obtenir les informations sur la table
                     cursor.execute('PRAGMA table_info(produits_avec_stock)')
 
-                    # Récupérer les résultats et afficher les entêtes de colonnes
+                    # Récupérer les résultats et afficher les en-têtes de colonnes
                     columns_info = cursor.fetchall()
                     column_names = [column[1] for column in columns_info]
 
@@ -268,8 +268,8 @@ class Lancement:
                     print(f'Il y a {count} produits dans la base de données.')
                     input("Tapez enter pour continuer")
 
-                    # Afficher les entêtes de colonnes
-                    print("Entêtes de colonnes de la table produits_avec_stock:")
+                    # Afficher les en-têtes de colonnes
+                    print("En-têtes de colonnes de la table produits_avec_stock:")
                     print(column_names)
                     input("Tapez enter pour continuer")
                     Lancement.depart()
@@ -343,6 +343,11 @@ class Lancement:
                     # Fermer les connexions aux bases de données
                     conn_prest.close()
                     conn_notre.close()
+
+                # Retour au menu principal
+                if sous_menu == 10:
+                    print(" ")
+                    Lancement.depart()
 
             # Consultation BDD Presta
             if retour_menu == 6:
@@ -452,6 +457,11 @@ class Lancement:
                     input("Tapez enter pour continuer")
                     Lancement.depart()
 
+                # Retour au menu principal
+                if sous_menu == 10:
+                    print(" ")
+                    Lancement.depart()
+
             # Création / remplissage et consultation de la BDD tri
             if retour_menu == 7:
                 sous_menu = Menus.sous_menu_7()
@@ -467,8 +477,60 @@ class Lancement:
                 if sous_menu == 3:
                     pass
 
-            # Quitter
+                # Retour au menu principal
+                if sous_menu == 10:
+                    print(" ")
+                    Lancement.depart()
+
+            # Gestion des produits à traiter
             if retour_menu == 8:
+                sous_menu = Menus.sous_menu_8()
+
+                # Créer la base de donner à partir du CSV
+                if sous_menu == 1:
+                    # Lecture du fichier CSV avec les colonnes sélectionnées
+                    selected_columns = ["ID_produit", "userRef", "stock", "ean13", "description", "bullet_points",
+                                        "etat_produit", "Prix_vente_mini", "Prix_vente_conseil", "Categorie", "title",
+                                        "weight", "Photo1", "Photo2", "Photo3", "Photo4", "Photo5", "Photo6",
+                                        "supplier", "taxRate", "isPack", "height", "length", "width", "otherRef1",
+                                        "Mode_transport", "Prix_achat", "Prix_transport", "otherRef5", "otherRef6",
+                                        "otherRef7", "otherRef8", "otherRef9", "otherRef10", "otherRef11",
+                                        "otherRef14"]
+
+                    df = pd.read_csv('CSV/Articles_a_traiter.csv', sep=';', usecols=selected_columns,
+                                     encoding='latin-1', low_memory=False)
+
+                    # Connexion à la base de données SQLite
+                    conn = sqlite3.connect('BDD/articles_a_traiter.db')
+
+                    # Écriture des données dans la table de la base de données
+                    df.to_sql('produits', conn, if_exists='replace', index=False)
+
+                    cursor = conn.cursor()
+
+                    # Création de l'index sur la colonne "code"
+                    cursor.execute('CREATE INDEX IF NOT EXISTS idx_code ON produits (userRef)')
+
+                    # Enregistrement des modifications et fermeture de la connexion
+                    conn.commit()
+                    # Fermeture de la connexion
+                    conn.close()
+
+                    # Retour au menu
+                    input("Tapez une touche pour continuer")
+                    Lancement.depart()
+
+                # Compter le nombre d'articles
+                if sous_menu == 2:
+                    pass
+
+                # Retour au menu principal
+                if sous_menu == 10:
+                    print(" ")
+                    Lancement.depart()
+
+            # Quitter
+            if retour_menu == 10:
                 sys.exit("Merci et à bientôt !")
 
 
