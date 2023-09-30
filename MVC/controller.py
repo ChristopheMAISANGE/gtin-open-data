@@ -83,7 +83,7 @@ class Lancement:
                                     "catégorie par défaut FR", "catégorie par défaut (chemin complet) FR",
                                     "catégories FR", "catégories (chemin complet) FR", "fabricant",
                                     "images : urls_to_all_for_product FR"]
-                df = pd.read_csv('2023_09_26 complet_presta.csv', sep=';', usecols=selected_columns,
+                df = pd.read_csv('CSV/produits_presta.csv', sep=';', usecols=selected_columns,
                                  encoding='latin-1')
 
                 # Connexion à la base de données SQLite
@@ -439,11 +439,12 @@ class Lancement:
                     input("Tapez enter pour continuer")
                     Lancement.depart()
 
+                # Exporter les articles qui ont du stock dans un CSV
                 if sous_menu == 6:
                     # Établir une connexion à la base de données SQLite
                     conn = sqlite3.connect('BDD/BDD_Presta.db')
 
-                    # Charger les données de la table "produits_avec_stock" dans un DataFrame Pandas
+                    # Charger les données de la table dans un DataFrame Pandas
                     query = 'SELECT * FROM produits WHERE quantité >= 1'
                     df = pd.read_sql_query(query, conn)
 
@@ -522,7 +523,186 @@ class Lancement:
 
                 # Compter le nombre d'articles
                 if sous_menu == 2:
-                    pass
+                    # Établir une connexion à la base de données SQLite
+                    conn = sqlite3.connect('BDD/articles_a_traiter.db')
+
+                    # Créer un curseur
+                    cursor = conn.cursor()
+
+                    # Exécuter une requête SQL pour compter le nombre de lignes dans la table "produits"
+                    cursor.execute('SELECT COUNT(*) FROM produits')
+
+                    # Récupérer le résultat
+                    count = cursor.fetchone()[0]
+
+                    # Fermer la connexion à la base de données
+                    conn.close()
+
+                    # Afficher le nombre de produits
+                    print(f'Il y a {count} produits dans la base de données.')
+                    input("Tapez enter pour continuer")
+                    Lancement.depart()
+
+                # Afficher et compter les produits qui ne contiennent pas EAN ou ean en userRef
+                if sous_menu == 3:
+                    # Établir une connexion à la base de données
+                    conn = sqlite3.connect('BDD/articles_a_traiter.db')
+                    cursor = conn.cursor()
+
+                    cursor.execute('''
+                        SELECT ID_produit, userRef, stock, ean13, title, Photo1, supplier, Mode_transport, Prix_achat
+                        FROM produits
+                        WHERE userRef NOT LIKE "%EAN%" AND userRef NOT LIKE "%ean%"
+                    ''')
+
+                    # Récupérer tous les résultats
+                    resultats = cursor.fetchall()
+
+                    # Afficher le nombre de produits trouvés
+                    print(" ")
+                    print("Nombre de produits sans 'EAN' ou 'ean' dans userRef :", len(resultats))
+                    print(" ")
+                    input("Tapez enter pour continuer")
+
+                    # Afficher les produits sous la forme souhaitée
+                    for row in resultats:
+                        print("ID_produit:", row[0])
+                        print("userRef:", row[1])
+                        print("stock:", row[2])
+                        print("ean13:", row[3])
+                        print("title:", row[4])
+                        print("Photo1:", row[5])
+                        print("supplier:", row[6])
+                        print("Mode_transport:", row[7])
+                        print("Prix_achat:", row[8])
+                        print(" ")
+
+                    # Fermer la connexion à la base de données
+                    conn.close()
+
+                    # Retour au menu
+                    input("Tapez une touche pour continuer")
+                    Lancement.depart()
+
+                # Afficher et compter les produits qui contiennent EAN ou ean en userRef
+                if sous_menu == 4:
+                    # Établir une connexion à la base de données
+                    conn = sqlite3.connect('BDD/articles_a_traiter.db')
+                    cursor = conn.cursor()
+
+                    cursor.execute('''
+                                    SELECT userRef, ean13
+                                    FROM produits
+                                    WHERE userRef LIKE "%EAN%" AND userRef LIKE "%ean%"
+                                ''')
+
+                    # Récupérer tous les résultats
+                    resultats = cursor.fetchall()
+
+                    # Afficher le nombre de produits trouvés
+                    print(" ")
+                    print("Nombre de produits avec 'EAN' ou 'ean' dans userRef :", len(resultats))
+                    print(" ")
+                    input("Tapez enter pour continuer")
+
+                    # Afficher les produits sous la forme souhaitée
+                    for row in resultats:
+                        print("userRef:", row[0], "ean13:", row[1])
+
+                    # Fermer la connexion à la base de données
+                    conn.close()
+
+                    # Retour au menu
+                    input("Tapez une touche pour continuer")
+                    Lancement.depart()
+
+                # Mise à jour des descriptions, Bullet points, catégories et Photo2
+                if sous_menu == 5:
+                    # Établir une connexion à la base de données SQLite
+                    conn = sqlite3.connect('BDD/articles_a_traiter.db')
+
+                    # Lire le fichier CSV dans un DataFrame
+                    csv_file = 'CSV/produits_presta.csv'
+                    df_csv = pd.read_csv(csv_file, sep=';', encoding='latin-1')
+
+                    # Convertir la colonne 'ean13' en chaînes de caractères (str)
+                    df_csv['ean13'] = df_csv['ean13'].astype(str)
+
+                    # Supprimer le ".0" de chaque valeur dans la colonne 'ean13'
+                    df_csv['ean13'] = df_csv['ean13'].str.replace('.0', '')
+
+                    # Initialiser un compteur pour le nombre de produits mis à jour
+                    nombre_de_produits_mis_a_jour = 0
+
+                    # Parcourir le DataFrame CSV et mettre à jour la base de données
+                    for index, row in df_csv.iterrows():
+                        ean13 = row['ean13']
+                        description_fr = row['description FR']
+                        bullet_points_fr = row['description courte FR']
+                        categorie_fr = row['catégories FR']
+                        photo2_fr = row['images : urls_to_all_for_product FR']
+
+                        # Vérifier si l'ean13 existe dans la base de données
+                        cursor = conn.cursor()
+                        cursor.execute('SELECT * FROM produits WHERE ean13 = ?', (ean13,))
+                        existing_product = cursor.fetchone()
+
+                        if existing_product:
+                            # Mettre à jour les colonnes de la base de données
+                            cursor.execute('''
+                                UPDATE produits
+                                SET description = ?, bullet_points = ?, Categorie = ?, Photo2 = ?
+                                WHERE ean13 = ?
+                            ''', (description_fr, bullet_points_fr, categorie_fr, photo2_fr, ean13))
+                            print(ean13)
+
+                            # Incrémenter le compteur
+                            nombre_de_produits_mis_a_jour += 1
+
+                    # Valider la transaction et fermer la connexion
+                    conn.commit()
+                    conn.close()
+
+                    # Afficher le nombre de produits mis à jour
+                    print("Nombre de produits mis à jour :", nombre_de_produits_mis_a_jour)
+                    # Retour au menu
+                    print(" ")
+                    input("Tapez une touche pour continuer")
+                    Lancement.depart()
+
+                # Afficher et compter tous les ean de 13 chiffres uniquement
+                if sous_menu == 6:
+                    # Établir une connexion à la base de données SQLite
+                    conn = sqlite3.connect('BDD/articles_a_traiter.db')
+
+                    # Créer un curseur
+                    cursor = conn.cursor()
+
+                    # Exécuter la requête SQL pour rechercher les produits avec un ean13 de 13 chiffres
+                    cursor.execute(
+                        "SELECT * FROM produits WHERE LENGTH(ean13) = 13 AND ean13 NOT LIKE '%[^0-9]%'")
+
+                    # Récupérer les résultats de la requête
+                    results = cursor.fetchall()
+
+                    # Exécuter une requête SQL pour compter le nombre de lignes dans la table "produits"
+                    cursor.execute('SELECT COUNT(*) FROM produits')
+
+                    # Récupérer le résultat
+                    count = cursor.fetchone()[0]
+
+                    print(str(len(results)), "sur", count, "produits")
+                    input("tapez enter pour continuer")
+
+                    # Afficher les produits trouvés
+                    for product in results:
+                        print(product)
+
+                    # Fermer la connexion à la base de données
+                    conn.close()
+
+                    input("Tapez enter pour continuer")
+                    Lancement.depart()
 
                 # Retour au menu principal
                 if sous_menu == 10:

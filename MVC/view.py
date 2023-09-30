@@ -52,6 +52,10 @@ class Menus:
     def sous_menu_8():
         print("1-Créer la base de donner à partir du CSV")
         print("2-Compter le nombre de produits dans la BDD")
+        print("3-Afficher et compter les produits qui ne contiennent pas EAN ou ean en userRef")
+        print("4-Afficher et compter les produits qui contiennent EAN ou ean en userRef")
+        print("5-Mise à jour des descriptions, Bullet points, catégories et photo2")
+        print("6-Afficher et compter tous les ean de 13 chiffres uniquement")
         print("10-Retour au menu principal")
         choix = int(input("Que voulez vous faire ?"))
         return choix
