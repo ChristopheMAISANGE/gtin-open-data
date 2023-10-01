@@ -62,6 +62,7 @@ class Menus:
         print("5-Mise à jour des descriptions, Bullet points, catégories et photos")
         print("6-Afficher et compter tous les ean de 13 chiffres uniquement")
         print("7-Exporter la BDD dans un CSV")
+        print("8-Compter les articles sans description")
         print("10-Retour au menu principal")
         choix = int(input("Que voulez vous faire ?"))
         return choix

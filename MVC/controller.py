@@ -770,6 +770,29 @@ class Lancement:
                     input("Tapez enter pour continuer")
                     Lancement.depart()
 
+                # Compter les articles sans description
+                if sous_menu == 8:
+                    # Établir une connexion à la base de données SQLite
+                    conn = sqlite3.connect('BDD/articles_a_traiter.db')
+
+                    # Créer un curseur
+                    cursor = conn.cursor()
+
+                    # Exécuter la requête SQL pour compter les produits sans description
+                    cursor.execute("SELECT COUNT(*) FROM produits WHERE description IS NULL OR description = ''")
+
+                    # Récupérer le résultat
+                    count = cursor.fetchone()[0]
+
+                    # Afficher le nombre de produits sans description
+                    print("Nombre de produits sans description :", count)
+
+                    # Fermer la connexion à la base de données
+                    conn.close()
+
+                    input("Tapez enter pour continuer")
+                    Lancement.depart()
+
                 # Retour au menu principal
                 if sous_menu == 10:
                     print(" ")
