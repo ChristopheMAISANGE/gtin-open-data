@@ -680,7 +680,7 @@ class Lancement:
 
                     # Exécuter la requête SQL pour rechercher les produits avec un ean13 de 13 chiffres
                     cursor.execute(
-                        "SELECT * FROM produits WHERE LENGTH(ean13) = 13 AND ean13 NOT LIKE '%[^0-9]%'")
+                        "SELECT ean13 FROM produits WHERE LENGTH(ean13) = 13 AND ean13 NOT LIKE '%[^0-9]%'")
 
                     # Récupérer les résultats de la requête
                     results = cursor.fetchall()
@@ -700,6 +700,12 @@ class Lancement:
 
                     # Fermer la connexion à la base de données
                     conn.close()
+
+                    # Créer un DataFrame pandas à partir des résultats
+                    df = pd.DataFrame(results, columns=['ean13'])
+
+                    # Exporter le DataFrame dans un fichier CSV
+                    df.to_csv('CSV/ean13_valides.csv', index=False)
 
                     input("Tapez enter pour continuer")
                     Lancement.depart()
