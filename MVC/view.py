@@ -1,6 +1,7 @@
 class Menus:
     @staticmethod
     def menu_principal():
+        print(" ")
         print("1-Créer la base de données EAN")
         print("2-Créer la base de données de nos produits (ShippingBo)")
         print("3-Créer la base de données des produits issus de Prestashop")
@@ -15,6 +16,7 @@ class Menus:
 
     @staticmethod
     def sous_menu_5():
+        print(" ")
         print("1-Consulter les produits 'A RECHERCHER'")
         print("2-Supprimer les A RECHERCHER dont le stock est à 0")
         print("3-Compter le nombre de produits dans la BDD")
@@ -29,6 +31,7 @@ class Menus:
 
     @staticmethod
     def sous_menu_6():
+        print(" ")
         print("1-Compter le nombre d'articles")
         print("2-Compter le nombre d'articles sans description")
         print("3-Recherche EAN")
@@ -41,6 +44,7 @@ class Menus:
 
     @staticmethod
     def sous_menu_7():
+        print(" ")
         print("1-Créer les bases de données")
         print("2-Remplir manuellement les BDD")
         print("3-Remplir avec un CSV")
@@ -50,12 +54,14 @@ class Menus:
 
     @staticmethod
     def sous_menu_8():
+        print(" ")
         print("1-Créer la base de donner à partir du CSV")
         print("2-Compter le nombre de produits dans la BDD")
         print("3-Afficher et compter les produits qui ne contiennent pas EAN ou ean en userRef")
         print("4-Afficher et compter les produits qui contiennent EAN ou ean en userRef")
-        print("5-Mise à jour des descriptions, Bullet points, catégories et photo2")
+        print("5-Mise à jour des descriptions, Bullet points, catégories et photos")
         print("6-Afficher et compter tous les ean de 13 chiffres uniquement")
+        print("7-Exporter la BDD dans un CSV")
         print("10-Retour au menu principal")
         choix = int(input("Que voulez vous faire ?"))
         return choix

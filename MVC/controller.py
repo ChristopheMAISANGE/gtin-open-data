@@ -466,6 +466,7 @@ class Lancement:
             # Création / remplissage et consultation de la BDD tri
             if retour_menu == 7:
                 sous_menu = Menus.sous_menu_7()
+
                 # Création
                 if sous_menu == 1:
                     pass
@@ -616,31 +617,40 @@ class Lancement:
                     input("Tapez une touche pour continuer")
                     Lancement.depart()
 
-                # Mise à jour des descriptions, Bullet points, catégories et Photo2
+                # Mise à jour des descriptions, Bullet points, catégories et Photos
                 if sous_menu == 5:
                     # Établir une connexion à la base de données SQLite
                     conn = sqlite3.connect('BDD/articles_a_traiter.db')
 
                     # Lire le fichier CSV dans un DataFrame
-                    csv_file = 'CSV/produits_presta.csv'
-                    df_csv = pd.read_csv(csv_file, sep=';', encoding='latin-1')
+                    csv_file1 = 'CSV/import_sync_centric_1.csv'
+                    csv_file2 = 'CSV/import_sync_centic_2.csv'
+                    df_csv = pd.read_csv(csv_file1, sep=',', encoding='latin-1')
+                    df_csv2 = pd.read_csv(csv_file2, sep=',', encoding='latin-1')
 
                     # Convertir la colonne 'ean13' en chaînes de caractères (str)
-                    df_csv['ean13'] = df_csv['ean13'].astype(str)
+                    df_csv['ean'] = df_csv['ean'].astype(str)
+                    df_csv2['ean'] = df_csv2['ean'].astype(str)
 
                     # Supprimer le ".0" de chaque valeur dans la colonne 'ean13'
-                    df_csv['ean13'] = df_csv['ean13'].str.replace('.0', '')
+                    df_csv['ean'] = df_csv['ean'].str.replace('.0', '')
+                    df_csv2['ean'] = df_csv2['ean'].str.replace('.0', '')
+
 
                     # Initialiser un compteur pour le nombre de produits mis à jour
                     nombre_de_produits_mis_a_jour = 0
 
-                    # Parcourir le DataFrame CSV et mettre à jour la base de données
+                    # Parcourir le DataFrame du 1er CSV et mettre à jour la base de données
                     for index, row in df_csv.iterrows():
-                        ean13 = row['ean13']
-                        description_fr = row['description FR']
-                        bullet_points_fr = row['description courte FR']
-                        categorie_fr = row['catégories FR']
-                        photo2_fr = row['images : urls_to_all_for_product FR']
+                        ean13 = row['ean']
+                        description_fr = row['description']
+                        bullet_points_fr = row['features']
+                        photo2_fr = row['additional_image_1']
+                        photo3_fr = row['additional_image_2']
+                        photo4_fr = row['additional_image_3']
+                        photo5_fr = row['additional_image_4']
+                        photo6_fr = row['additional_image_5']
+
 
                         # Vérifier si l'ean13 existe dans la base de données
                         cursor = conn.cursor()
@@ -651,10 +661,41 @@ class Lancement:
                             # Mettre à jour les colonnes de la base de données
                             cursor.execute('''
                                 UPDATE produits
-                                SET description = ?, bullet_points = ?, Categorie = ?, Photo2 = ?
+                                SET description = ?, bullet_points = ?, Photo2 = ?, Photo3 = ?, Photo4 = ?, 
+                                Photo5 = ?, Photo6 = ?
                                 WHERE ean13 = ?
-                            ''', (description_fr, bullet_points_fr, categorie_fr, photo2_fr, ean13))
-                            print(ean13)
+                            ''', (description_fr, bullet_points_fr, photo2_fr, photo3_fr, photo4_fr, photo5_fr,
+                                  photo6_fr, ean13))
+
+                            # Incrémenter le compteur
+                            nombre_de_produits_mis_a_jour += 1
+
+                    # Parcourir le DataFrame du 2nd CSV et mettre à jour la base de données
+                    for index, row in df_csv2.iterrows():
+                        ean13 = row['ean']
+                        description_fr = row['description']
+                        bullet_points_fr = row['features']
+                        photo2_fr = row['additional_image_1']
+                        photo3_fr = row['additional_image_2']
+                        photo4_fr = row['additional_image_3']
+                        photo5_fr = row['additional_image_4']
+                        photo6_fr = row['additional_image_5']
+
+                        # Vérifier si l'ean13 existe dans la base de données
+                        cursor = conn.cursor()
+                        cursor.execute('SELECT * FROM produits WHERE ean13 = ?', (ean13,))
+                        existing_product = cursor.fetchone()
+
+                        if existing_product:
+                            # Mettre à jour les colonnes de la base de données
+                            cursor.execute('''
+                                UPDATE produits
+                                SET description = ?, bullet_points = ?, Photo2 = ?, Photo3 = ?, Photo4 = ?, 
+                                Photo5 = ?, Photo6 = ?
+                                WHERE ean13 = ?
+                                                    ''', (
+                            description_fr, bullet_points_fr, photo2_fr, photo3_fr, photo4_fr, photo5_fr,
+                            photo6_fr, ean13))
 
                             # Incrémenter le compteur
                             nombre_de_produits_mis_a_jour += 1
@@ -707,6 +748,25 @@ class Lancement:
                     # Exporter le DataFrame dans un fichier CSV
                     df.to_csv('CSV/ean13_valides.csv', index=False)
 
+                    input("Tapez enter pour continuer")
+                    Lancement.depart()
+
+                # Exporter la BDD dans un CSV
+                if sous_menu == 7:
+                    # Établir une connexion à la base de données SQLite
+                    conn = sqlite3.connect('BDD/articles_a_traiter.db')
+
+                    # Charger les données de la table dans un DataFrame Pandas
+                    query = 'SELECT * FROM produits'
+                    df = pd.read_sql_query(query, conn)
+
+                    # Fermer la connexion à la base de données SQLite
+                    conn.close()
+
+                    # Exporter le DataFrame dans un fichier CSV avec le point-virgule comme séparateur
+                    df.to_csv('CSV/tous_produits_modifies.csv', sep=';', index=False)
+
+                    print("Opération réussie")
                     input("Tapez enter pour continuer")
                     Lancement.depart()
 
